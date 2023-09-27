@@ -1,0 +1,26 @@
+<html>  
+  <head>  
+    <title>MusicGo</title>  
+    <link rel="stylesheet" type="text/css" href="/static/index.css">
+  </head> 
+  <body>
+    <h1>Login Page</h1>
+    
+      <form method="POST">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname" required>
+
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required>
+
+        <button type="submit" name="login">Login</button>
+        <!-- <button type="submit" name="register">Register</button> -->
+      </form>
+    {{range .}}
+      <div>
+        <p>{{.}}</p>
+      </div>
+    {{end}}
+  </body>
+
+</html>
