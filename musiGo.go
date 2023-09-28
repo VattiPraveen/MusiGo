@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+// FileInfo struct to store the file information
 type FileInfo struct {
 	Name  string      `json:"Name"`
 	IsDir bool        `json:"IsDir"`
@@ -30,11 +31,13 @@ var users = map[string]string{
 	"admin":   "admin",
 }
 
+// main function to boot up everything
 func main() {
 	templates = template.Must(template.ParseGlob("templates/*.html"))
 	RunServer()
 }
 
+// RunServer function to run the server
 func RunServer() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", getLogin).Methods("GET")
@@ -51,10 +54,12 @@ func RunServer() {
 
 }
 
+// getLogin function to get the login page
 func getLogin(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "index.html", nil)
 }
 
+// login function to login the user
 func login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -79,6 +84,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// http.Redirect(w, r, "/music/", 302)
 }
 
+// fileHandler function to retrieve the file data and serve it to the client in JSON format
 func fileHandler(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join(root, r.URL.Path[len(filePrefix):])
 	stat, err := os.Stat(path)
@@ -93,9 +99,9 @@ func fileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.ServeFile(w, r, path)
-
 }
 
+// serveDir function to serve the directory data to the client in JSON format
 func serveDir(w http.ResponseWriter, r *http.Request, path string) {
 	defer func() {
 		if err, ok := recover().(error); ok {
@@ -124,7 +130,6 @@ func serveDir(w http.ResponseWriter, r *http.Request, path string) {
 	}
 
 	err = json.NewEncoder(w).Encode(fileinfos)
-	// j := json.NewEncoder(w)
 
 	if err != nil {
 		panic(err)
